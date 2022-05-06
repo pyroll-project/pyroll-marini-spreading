@@ -43,8 +43,7 @@ def width(roll_pass: RollPass):
 
     fourth_denominator = 2 * roll_pass.out_profile.equivalent_rectangle.height * roll_pass.roll.nominal_radius * roll_pass.marini_parameter_b
 
-    out_width = roll_pass.in_profile.equivalent_rectangle.width + (
-            numerator / (first_denominator + second_denominator * third_denominator + fourth_denominator))
+    out_width = roll_pass.in_profile.width + numerator / (first_denominator + second_denominator * third_denominator + fourth_denominator)
 
     log.debug(f"Width after Marini spreading model: {out_width}.")
 

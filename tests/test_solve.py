@@ -13,7 +13,7 @@ def test_solve(tmp_path: Path, caplog):
     import pyroll.ui.cli.res.input_trio as input_py
     import pyroll_marini_spreading
 
-    caplog.set_level(logging.DEBUG, logger="pyroll")
+    caplog.set_level(logging.DEBUG, logger="pyroll_marini_spreading")
 
     sequence = input_py.sequence
 

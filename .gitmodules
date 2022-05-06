@@ -1,0 +1,3 @@
+[submodule "pyroll-core"]
+	path = pyroll-core
+	url = https://gitlab.hrz.tu-chemnitz.de/imf-numerik/pyroll/pyroll-core

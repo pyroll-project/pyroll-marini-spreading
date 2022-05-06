@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pyroll-marini-spreading"
+version = "1.0.0"
+description = "Plugin for PyRoll providing the Marini spreading model."
+authors = [
+    "Christoph Renzing <christoph.renzing@imf.tu-freiberg.de>",
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.11"
+pyroll = "1.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0.0"
+pyroll = { path = "pyroll-core", develop = true }
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,5 +1,4 @@
 import logging
-import sys
 
 import numpy as np
 from pyroll import RollPass
@@ -25,8 +24,8 @@ def marini_parameter_b(roll_pass: RollPass):
     return np.sqrt(roll_pass.equivalent_height_change / roll_pass.roll.nominal_radius)
 
 
-@RollPass.OutProfile.hookimpl
-def width(roll_pass: RollPass):
+@RollPass.hookimpl
+def spread(roll_pass: RollPass):
     log = logging.getLogger(__name__)
 
     numerator = 2 * roll_pass.equivalent_height_change * roll_pass.in_profile.equivalent_rectangle.width * (
@@ -43,8 +42,8 @@ def width(roll_pass: RollPass):
 
     fourth_denominator = 2 * roll_pass.out_profile.equivalent_rectangle.height * roll_pass.roll.nominal_radius * roll_pass.marini_parameter_b
 
-    out_width = roll_pass.in_profile.width + numerator / (first_denominator + second_denominator * third_denominator + fourth_denominator)
+    spread = 1 + (numerator / (first_denominator + second_denominator * third_denominator + fourth_denominator)) / roll_pass.in_profile.equivalent_rectangle.width
 
-    log.debug(f"Width after Marini spreading model: {out_width}.")
+    log.debug(f"Spread after Marini spreading model: {spread}.")
 
-    return out_width
+    return spread

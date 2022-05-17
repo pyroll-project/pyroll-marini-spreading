@@ -1,32 +1,27 @@
 import logging
 from pathlib import Path
 
-import pytest
-
-from pyroll import solve
-from pyroll.ui.reporter import Reporter
-
-THIS_DIR = Path(__file__).parent
+import pyroll.core
+import pyroll.ui
 
 
 def test_solve(tmp_path: Path, caplog):
-    import pyroll.ui.cli.res.input_trio as input_py
-    import pyroll_marini_spreading
+    caplog.set_level(logging.ERROR, "matplotlib")
+    caplog.set_level(logging.DEBUG)
 
-    caplog.set_level(logging.DEBUG, logger="pyroll_marini_spreading")
+    import pyroll.wusatowski_spreading
 
-    sequence = input_py.sequence
+    from pyroll.ui.cli.res import input_trio
 
-    solve(sequence, input_py.in_profile)
+    pyroll.core.solve(input_trio.sequence, input_trio.in_profile)
 
-    report = Reporter()
-
-    rendered = report.render(sequence)
-    print()
+    report = pyroll.ui.Reporter().render(input_trio.sequence)
 
     report_file = tmp_path / "report.html"
-    report_file.write_text(rendered)
+    report_file.write_text(report)
+    print()
     print(report_file)
 
-    print("\nLog:")
+    print()
     print(caplog.text)
+

@@ -10,7 +10,9 @@ license = "BSD-3-Clause"
 homepage = "https://pyroll-project.github.io/"
 repository = "https://github.com/pyroll-project/pyroll-marini-spreading"
 documentation = "https://github.com/pyroll-project/pyroll-marini-spreading/blob/main/docs/docs.pdf"
-
+packages = [
+    { include = "pyroll/marini_spreading" }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
@@ -18,7 +20,7 @@ pyroll = "1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.0"
-pyroll = { path = "pyroll-core", develop = true }
+pyroll = { git = "https://github.com/pyroll-project/pyroll-core", branch = "main", develop = true }
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

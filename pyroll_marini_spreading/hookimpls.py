@@ -1,7 +1,7 @@
 import logging
 
 import numpy as np
-from pyroll import RollPass
+from pyroll.core import RollPass
 
 
 @RollPass.hookimpl

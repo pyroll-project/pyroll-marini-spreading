@@ -1,4 +1,4 @@
-from pyroll import RollPass
+from pyroll.core import RollPass
 from . import hookspecs
 from . import hookimpls
 

@@ -9,7 +9,7 @@ def test_solve(tmp_path: Path, caplog):
     caplog.set_level(logging.ERROR, "matplotlib")
     caplog.set_level(logging.DEBUG)
 
-    import pyroll.wusatowski_spreading
+    import pyroll.marini_spreading
 
     from pyroll.ui.cli.res import input_trio
 

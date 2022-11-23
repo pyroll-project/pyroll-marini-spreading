@@ -1,27 +1,38 @@
 import logging
 from pathlib import Path
 
-import pyroll.core
-import pyroll.ui
+from pyroll.core import solve
+from pyroll.ui import Reporter, Exporter
+from input_imf_continuous_rolling_plant import in_profile, sequence
 
 
 def test_solve(tmp_path: Path, caplog):
-    caplog.set_level(logging.ERROR, "matplotlib")
-    caplog.set_level(logging.DEBUG)
+    caplog.set_level(logging.DEBUG, logger="pyroll")
 
+    import pyroll
     import pyroll.marini_spreading
+    import pyroll.lendl_equivalent_method
+    import pyroll.hitchcock_roll_flattening
+    import pyroll.hensel_power_and_labour
+    import pyroll.freiberg_flow_stress
+    import pyroll.integral_thermal
 
-    from pyroll.ui.cli.res import input_trio
+    solve(sequence, in_profile)
 
-    pyroll.core.solve(input_trio.sequence, input_trio.in_profile)
+    report = Reporter()
+    export = Exporter()
 
-    report = pyroll.ui.Reporter().render(input_trio.sequence)
-
+    export_file = tmp_path / "export.csv"
     report_file = tmp_path / "report.html"
-    report_file.write_text(report)
+
+    rendered = report.render(sequence)
+    exported = export.export(sequence, "csv")
     print()
+
+    export_file.write_bytes(exported)
+    report_file.write_text(rendered)
     print(report_file)
+    print(export_file)
 
-    print()
+    print("\nLog:")
     print(caplog.text)
-

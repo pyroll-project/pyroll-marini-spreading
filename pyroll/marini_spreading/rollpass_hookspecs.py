@@ -7,7 +7,7 @@ def equivalent_height_change(roll_pass):
 
 
 @RollPass.hookspec
-def friction_coefficient(roll_pass):
+def coulomb_friction_coefficient(roll_pass):
     """Friction coefficient."""
 
 

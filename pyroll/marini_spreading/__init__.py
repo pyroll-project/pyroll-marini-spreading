@@ -1,6 +1,6 @@
 from pyroll.core import RollPass
-from . import hookspecs
-from . import hookimpls
+from . import rollpass_hookspecs
+from . import rollpass_hookimpls
 
 RollPass.plugin_manager.add_hookspecs(hookspecs)
 

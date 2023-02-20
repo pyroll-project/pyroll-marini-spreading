@@ -1,6 +1,6 @@
 [build]
 packages = [
-    "pyroll" # place your package in the pyroll namespace
+    "pyroll"
 ]
 
 [version]
@@ -10,23 +10,18 @@ path = "pyroll/marini_spreading.py"
 path = ".venv"
 dependencies = [
     "pytest ~= 7.0",
-    "pyroll-report ~= 2.0.0b",
+    "pyroll-report ~= 2.0.0b2"
 ]
 
 
 [envs.docs]
 path = ""
 dependencies = [
-    "matplotlib",
-    "pygments ~= 2.0",
-    "pytask ~= 0.2.0",
-    "pytask_latex ~= 0.2.0",
-    "jinja2",
-    "toml"
+    "pygments ~= 2.0"
 ]
 
 [envs.docs.scripts]
-build = "latexmk --cd --pdf --shell-escape docs/docs" # compile LaTeX docs with latexmk
+build = "latexmk --cd --pdf --shell-escape docs/docs"
 
 [envs.test]
 path = ""
@@ -36,3 +31,5 @@ all = "pytest"
 
 [[envs.test.matrix]]
 python = ["3.9", "3.10", "3.11"]
+
+

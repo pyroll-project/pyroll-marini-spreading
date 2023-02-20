@@ -6,7 +6,7 @@ from pyroll.core import Profile, PassSequence, RollPass, Roll, CircularOvalGroov
 
 
 def test_solve(tmp_path: Path, caplog):
-    caplog.set_level(logging.DEBUG, logger="pyroll")
+    caplog.set_level(logging.INFO, logger="pyroll")
 
     import pyroll.marini_spreading
 

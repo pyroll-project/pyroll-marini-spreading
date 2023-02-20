@@ -1,14 +1,19 @@
-import logging
 import numpy as np
-
-from pyroll.core import RollPass, root_hooks, Unit
+from pyroll.core import RollPass, root_hooks, Unit, ThreeRollPass
 from pyroll.core.hooks import Hook
 
-VERSION = "2.0.0b"
+VERSION = "2.0.0"
+
+root_hooks.add(Unit.OutProfile.width)
 
 RollPass.coulomb_friction_coefficient = Hook[float]()
-RollPass.marini_parameter_a = Hook[float]()
-RollPass.marini_parameter_b = Hook[float]()
+"""Friction coefficient according to Coulombs model."""
+
+RollPass.first_marini_parameter = Hook[float]()
+"""First parameter a of Marini's spread equation."""
+
+RollPass.second_marini_parameter = Hook[float]()
+"""Second parameter b of Marini's spread equation."""
 
 
 @RollPass.coulomb_friction_coefficient
@@ -16,50 +21,60 @@ def coulomb_friction_coefficient(self: RollPass):
     raise ValueError("You must provide a friction coefficient to use the pyroll-marini-spreading plugin.")
 
 
-@RollPass.marini_parameter_a
-def marini_parameter_a(self: RollPass):
+@RollPass.first_marini_parameter
+def first_marini_parameter(self: RollPass):
     equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
     return np.sqrt(equivalent_height_change) / (
             2 * self.coulomb_friction_coefficient * np.sqrt(self.roll.working_radius))
 
 
-@RollPass.marini_parameter_b
-def marini_parameter_b(self: RollPass):
+@RollPass.second_marini_parameter
+def second_marini_parameter(self: RollPass):
     equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
     return np.sqrt(equivalent_height_change / self.roll.working_radius)
 
 
-@RollPass.OutProfile.width
-def width(self: RollPass.OutProfile):
-    roll_pass = self.roll_pass()
-    log = logging.getLogger(__name__)
+# noinspection PyUnresolvedReferences
+@RollPass.spread
+def spread(self: RollPass):
+    equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
 
-    if not self.has_set_or_cached("width"):
-        self.width = roll_pass.roll.groove.usable_width
+    numerator = 2 * equivalent_height_change * self.in_profile.equivalent_width * (
+            self.roll.working_radius - self.in_profile.equivalent_height / 2) * self.second_marini_parameter
 
-    equivalent_height_change = roll_pass.in_profile.equivalent_height - self.equivalent_height
+    first_denominator = self.out_profile.equivalent_height * self.in_profile.equivalent_width
 
-    numerator = 2 * equivalent_height_change * roll_pass.in_profile.equivalent_width * (
-            roll_pass.roll.working_radius - roll_pass.in_profile.equivalent_height / 2) * roll_pass.marini_parameter_b
-
-    first_denominator = self.equivalent_height * roll_pass.in_profile.equivalent_width
-
-    second_denominator = (roll_pass.in_profile.equivalent_width * (
-            roll_pass.in_profile.equivalent_height + self.equivalent_height) / 2) * (
-                                 (1 + roll_pass.marini_parameter_a) / (1 - roll_pass.marini_parameter_a))
+    second_denominator = (self.in_profile.equivalent_width * (
+            self.in_profile.equivalent_height + self.out_profile.equivalent_height) / 2) * (
+                                 (1 + self.first_marini_parameter) / (1 - self.first_marini_parameter))
 
     third_denominator = (0.91 * (
-            roll_pass.in_profile.equivalent_width + 3 * roll_pass.in_profile.equivalent_height)) / (
-                                4 * roll_pass.in_profile.equivalent_height)
+            self.in_profile.equivalent_width + 3 * self.in_profile.equivalent_height)) / (
+                                4 * self.in_profile.equivalent_height)
 
-    fourth_denominator = 2 * self.equivalent_height * roll_pass.roll.working_radius * roll_pass.marini_parameter_b
+    fourth_denominator = 2 * self.out_profile.equivalent_height * self.roll.working_radius * self.second_marini_parameter
 
-    spread = 1 + (numerator / (
-            first_denominator + second_denominator * third_denominator + fourth_denominator)) / roll_pass.in_profile.equivalent_width
-
-    log.info(f"Spread after Marini spreading model: {spread}.")
-
-    return spread * roll_pass.in_profile.width
+    return (
+            1 + (numerator / (
+            first_denominator + second_denominator * third_denominator + fourth_denominator)) / self.in_profile.equivalent_width
+    )
 
 
-root_hooks.add(Unit.OutProfile.width)
+@RollPass.OutProfile.width
+def width(self: RollPass.OutProfile):
+    rp = self.roll_pass
+
+    if not self.has_set_or_cached("width"):
+        return None
+
+    return rp.spread * rp.in_profile.width
+
+
+@ThreeRollPass.OutProfile.width
+def width(self: RollPass.OutProfile):
+    rp = self.roll_pass
+
+    if not self.has_set_or_cached("width"):
+        return None
+
+    return rp.spread * rp.in_profile.width

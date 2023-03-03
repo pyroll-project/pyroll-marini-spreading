@@ -1,27 +1,30 @@
-[tool.poetry]
+[project]
 name = "pyroll-marini-spreading"
-version = "1.0.1"
 description = "Plugin for PyRoll providing the Marini spreading model."
 authors = [
-    "Christoph Renzing <christoph.renzing@imf.tu-freiberg.de>",
+    { name = "Christoph Renzing", email = "christoph.renzing@imf.tu-freiberg.de" }
 ]
 
 license = "BSD-3-Clause"
-homepage = "https://pyroll-project.github.io/"
-repository = "https://github.com/pyroll-project/pyroll-marini-spreading"
-documentation = "https://github.com/pyroll-project/pyroll-marini-spreading/blob/main/docs/docs.pdf"
-packages = [
-    { include = "pyroll/marini_spreading" }
+requires-python = ">=3.9, <4.0"
+dependencies = [
+    "pyroll-core ~= 2.0.0",
+]
+readme = "README.md"
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Manufacturing",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering"
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.9, <3.11"
-pyroll-basic = "^1.0.1"
+dynamic = ["version"]
 
-[tool.poetry.dev-dependencies]
-pytest = "^7.0.0"
-
+[project.urls]
+Homepage = "https://pyroll-project.github.io"
+Repository = "https://github.com/pyroll-project/pyroll-marini-spreading"
+Documentation = "https://github.com/pyroll-project/pyroll-marini-spreading/blob/main/docs/docs.pdf"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

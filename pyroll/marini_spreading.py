@@ -5,10 +5,6 @@ from pyroll.core.hooks import Hook
 VERSION = "2.0.0"
 
 root_hooks.add(Unit.OutProfile.width)
-
-RollPass.coulomb_friction_coefficient = Hook[float]()
-"""Friction coefficient according to Coulombs model."""
-
 RollPass.first_marini_parameter = Hook[float]()
 """First parameter a of Marini's spread equation."""
 
@@ -16,13 +12,10 @@ RollPass.second_marini_parameter = Hook[float]()
 """Second parameter b of Marini's spread equation."""
 
 
-@RollPass.coulomb_friction_coefficient
-def coulomb_friction_coefficient(self: RollPass):
-    raise ValueError("You must provide a friction coefficient to use the pyroll-marini-spreading plugin.")
-
-
 @RollPass.first_marini_parameter
 def first_marini_parameter(self: RollPass):
+    import pyroll.interface_friction
+
     equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
     return np.sqrt(equivalent_height_change) / (
             2 * self.coulomb_friction_coefficient * np.sqrt(self.roll.working_radius))

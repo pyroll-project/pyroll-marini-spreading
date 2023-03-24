@@ -8,6 +8,7 @@ from pyroll.core import Profile, PassSequence, RollPass, Roll, CircularOvalGroov
 def test_solve(tmp_path: Path, caplog):
     caplog.set_level(logging.INFO, logger="pyroll")
 
+    import pyroll.interface_friction
     import pyroll.marini_spreading
 
     in_profile = Profile.round(

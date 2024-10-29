@@ -16,14 +16,14 @@ RollPass.second_marini_parameter = Hook[float]()
 def first_marini_parameter(self: RollPass):
     import pyroll.interface_friction
 
-    equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
+    equivalent_height_change = np.abs(self.in_profile.equivalent_height - self.out_profile.equivalent_height)
     return np.sqrt(equivalent_height_change) / (
             2 * self.coulomb_friction_coefficient * np.sqrt(self.roll.working_radius))
 
 
 @RollPass.second_marini_parameter
 def second_marini_parameter(self: RollPass):
-    equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
+    equivalent_height_change = np.abs(self.in_profile.equivalent_height - self.out_profile.equivalent_height)
     return np.sqrt(equivalent_height_change / self.roll.working_radius)
 
 

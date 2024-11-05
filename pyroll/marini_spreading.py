@@ -2,7 +2,7 @@ import numpy as np
 from pyroll.core import BaseRollPass, root_hooks, Unit, ThreeRollPass
 from pyroll.core.hooks import Hook
 
-VERSION = "2.0"
+VERSION = "2.0.1"
 
 root_hooks.add(Unit.OutProfile.width)
 BaseRollPass.first_marini_parameter = Hook[float]()

@@ -1,19 +1,19 @@
 import numpy as np
-from pyroll.core import RollPass, root_hooks, Unit, ThreeRollPass
+from pyroll.core import BaseRollPass, root_hooks, Unit, ThreeRollPass
 from pyroll.core.hooks import Hook
 
 VERSION = "2.0"
 
 root_hooks.add(Unit.OutProfile.width)
-RollPass.first_marini_parameter = Hook[float]()
+BaseRollPass.first_marini_parameter = Hook[float]()
 """First parameter a of Marini's spread equation."""
 
-RollPass.second_marini_parameter = Hook[float]()
+BaseRollPass.second_marini_parameter = Hook[float]()
 """Second parameter b of Marini's spread equation."""
 
 
-@RollPass.first_marini_parameter
-def first_marini_parameter(self: RollPass):
+@BaseRollPass.first_marini_parameter
+def first_marini_parameter(self: BaseRollPass):
     import pyroll.interface_friction
 
     equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
@@ -21,15 +21,15 @@ def first_marini_parameter(self: RollPass):
             2 * self.coulomb_friction_coefficient * np.sqrt(self.roll.working_radius))
 
 
-@RollPass.second_marini_parameter
-def second_marini_parameter(self: RollPass):
+@BaseRollPass.second_marini_parameter
+def second_marini_parameter(self: BaseRollPass):
     equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
     return np.sqrt(equivalent_height_change / self.roll.working_radius)
 
 
 # noinspection PyUnresolvedReferences
-@RollPass.spread
-def spread(self: RollPass):
+@BaseRollPass.spread
+def spread(self: BaseRollPass):
     equivalent_height_change = self.in_profile.equivalent_height - self.out_profile.equivalent_height
 
     numerator = 2 * equivalent_height_change * self.in_profile.equivalent_width * (
@@ -53,8 +53,8 @@ def spread(self: RollPass):
     )
 
 
-@RollPass.OutProfile.width
-def width(self: RollPass.OutProfile):
+@BaseRollPass.OutProfile.width
+def width(self: BaseRollPass.OutProfile):
     rp = self.roll_pass
 
     if not self.has_set_or_cached("width"):
@@ -64,7 +64,7 @@ def width(self: RollPass.OutProfile):
 
 
 @ThreeRollPass.OutProfile.width
-def width(self: RollPass.OutProfile):
+def width(self: BaseRollPass.OutProfile):
     rp = self.roll_pass
 
     if not self.has_set_or_cached("width"):

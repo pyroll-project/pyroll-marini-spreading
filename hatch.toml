@@ -10,7 +10,7 @@ path = "pyroll/marini_spreading.py"
 path = ".venv"
 dependencies = [
     "pytest ~= 7.0",
-    "pyroll-report"
+    "pyroll-report ~= 3.0"
 ]
 
 

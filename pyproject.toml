@@ -8,8 +8,8 @@ authors = [
 license = "BSD-3-Clause"
 requires-python = ">=3.9, <4.0"
 dependencies = [
-    "pyroll-core ~= 2.1",
-    "pyroll-interface-friction~= 2.0"
+    "pyroll-core ~= 3.0",
+    "pyroll-interface-friction~= 3.0"
 ]
 readme = "README.md"
 classifiers = [

@@ -2,7 +2,7 @@ import numpy as np
 from pyroll.core import BaseRollPass, root_hooks, Unit, ThreeRollPass
 from pyroll.core.hooks import Hook
 
-VERSION = "2.0.1"
+VERSION = "3.0"
 
 root_hooks.add(Unit.OutProfile.width)
 BaseRollPass.first_marini_parameter = Hook[float]()
@@ -54,16 +54,6 @@ def spread(self: BaseRollPass):
 
 
 @BaseRollPass.OutProfile.width
-def width(self: BaseRollPass.OutProfile):
-    rp = self.roll_pass
-
-    if not self.has_set_or_cached("width"):
-        return None
-
-    return rp.spread * rp.in_profile.width
-
-
-@ThreeRollPass.OutProfile.width
 def width(self: BaseRollPass.OutProfile):
     rp = self.roll_pass
 

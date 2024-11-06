@@ -62,12 +62,3 @@ def width(self: BaseRollPass.OutProfile):
 
     return rp.spread * rp.in_profile.width
 
-
-@ThreeRollPass.OutProfile.width
-def width(self: BaseRollPass.OutProfile):
-    rp = self.roll_pass
-
-    if not self.has_set_or_cached("width"):
-        return None
-
-    return rp.spread * rp.in_profile.width
